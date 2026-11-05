@@ -9,10 +9,10 @@
     <title>LAB01 - Requisitos mínimos de entrega (arquitectura)</title>
     <copyright>bim-lab</copyright>
     <version>1.0.0</version>
-    <description>Reglas de contenido mínimas para modelos de arquitectura del laboratorio openBIM.</description>
+    <description>EJEMPLO DIDÁCTICO. Reglas creadas para el laboratorio openBIM; no provienen de un EIR real ni de una norma. En un proyecto real, cada especificación debe trazarse a la cláusula del EIR que la origina.</description>
     <author>sebastz3120@gmail.com</author>
     <date>2026-11-05</date>
-    <purpose>Control de calidad de entregables (ISO 19650 / Plan BIM Perú)</purpose>
+    <purpose>Aprendizaje: control de calidad de entregables según ISO 19650</purpose>
     <milestone>Diseño - Entrega 01</milestone>
   </info>
 

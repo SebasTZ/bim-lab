@@ -124,9 +124,11 @@ Proyecto-Originador-Volumen-Nivel-Tipo-Rol-Número
   LAB01 -   STZ    -   ZZ  -  01 - M3 - A - 0001 .ifc
 ```
 
-Cada campo se valida con una expresión regular. Los códigos deben ajustarse a lo que defina el Plan de Ejecución BIM (BEP) o los requisitos de información de cada proyecto.
+Cada campo se valida con una expresión regular. Los códigos actuales son de ejemplo: deben ajustarse a lo que defina el estándar de información del proyecto y su Plan de Ejecución BIM (BEP).
 
 ### Contenido del modelo (`ids/LAB01-requisitos-minimos.ids`)
+
+> **Reglas didácticas.** R01 a R04 son ejemplos creados para el laboratorio. No provienen de un EIR real ni de una norma. En un proyecto real, cada especificación IDS debe trazarse a la cláusula del requisito de intercambio de información (EIR) que la origina.
 
 | Código | Regla | Técnica IDS |
 |---|---|---|
@@ -158,9 +160,22 @@ bim-lab/
 
 ## Contexto: BIM en la inversión pública peruana
 
-La Resolución Directoral N° 0007-2025-EF/63.01 del MEF establece el uso obligatorio de BIM en las fases de Formulación y Evaluación y de Ejecución de las inversiones de 14 tipologías priorizadas, para entidades del Gobierno Nacional y gobiernos regionales. La obligación está vigente desde agosto de 2026.
+La Resolución Directoral N° 0007-2025-EF/63.01 de la DGPMI del MEF aprueba el listado de 14 tipologías de proyectos del Gobierno Nacional y de los gobiernos regionales que se desarrollarán aplicando BIM. Su artículo 3, que establece la obligatoriedad, entra en vigor a los 12 meses de su publicación (agosto de 2026). La obligación alcanza las fases de Formulación y Evaluación y de Ejecución, esta última desde la elaboración del expediente técnico o documento equivalente.
 
 Este laboratorio busca entender esa adopción desde la ingeniería de sistemas: cómo un requisito de información se vuelve verificable, auditable y automatizable.
+
+### Fuentes oficiales
+
+Fecha de consulta: 2026-11-05.
+
+| Fuente | Emisor | Uso en este repositorio |
+|---|---|---|
+| [RD N° 0007-2025-EF/63.01 (nota oficial)](https://mef.gob.pe/planbimperu/novedadesbim/novedad-20250813.html) | MEF · Plan BIM Perú | Tipologías y obligatoriedad de BIM |
+| [Plazos de adopción para Gobierno Nacional y GORE](https://mef.gob.pe/planbimperu/novedadesbim/novedad-20250902-2.html) | MEF · Plan BIM Perú | Fases y plazos de aplicación |
+| [Recursos BIM: Guía Nacional BIM y plantillas](https://mef.gob.pe/planbimperu/recursosbim.html) | MEF · Plan BIM Perú | Marco de gestión de información y plantillas EIR, BEP, MIDP y TIDP |
+| ISO 19650-1 e ISO 19650-2 | ISO · INACAL | Procesos de entrega y estados del CDE. Norma de pago: se cita, no se reproduce |
+
+Este repositorio no reproduce el texto de las normas. Ante cualquier discrepancia, prevalece la fuente oficial.
 
 ## Limitaciones conocidas
 
@@ -173,8 +188,16 @@ Este laboratorio busca entender esa adopción desde la ingeniería de sistemas: 
 - [x] **Etapa 1:** validación de entregables (nomenclatura + IDS)
 - [ ] **Etapa 2:** traducir requisitos de información reales (de EIR a IDS)
 - [ ] **Etapa 3:** auditar modelos reales exportados desde software de autoría
-- [ ] **Etapa 4:** entorno de datos común (CDE) y estados de la información de ISO 19650 con Git
+- [ ] **Etapa 4:** versionado y líneas base de la información con Git (tags y releases) y su relación con un CDE institucional
 - [ ] **Etapa 5:** microservicio (API + Docker) e integración continua
+
+## Versionado y CDE
+
+Este repositorio **no se declara como Entorno de Datos Común (CDE)**. El CDE es el sistema institucional donde la información cambia de estado (en progreso, compartido, publicado, archivado). Git cumple otro papel: conserva el historial y fija líneas base.
+
+- El trabajo vigente vive en rutas y nombres estables. No se crean carpetas por estado ni archivos `final`, `final2` o con fecha.
+- Las versiones siguen versionado semántico: `0.x` para borradores y `1.0.0` para la primera línea base aprobada.
+- Cada línea base se marca con un tag anotado (por ejemplo, `v0.1.0`) y una release.
 
 ## Tecnologías
 
