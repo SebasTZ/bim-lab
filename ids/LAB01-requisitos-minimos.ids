@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ids xmlns="http://standards.buildingsmart.org/IDS"
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+
+  <!-- ===== Metadatos del IDS (quién exige, para qué entrega) ===== -->
+  <info>
+    <title>LAB01 - Requisitos mínimos de entrega (arquitectura)</title>
+    <copyright>bim-lab</copyright>
+    <version>1.0.0</version>
+    <description>Reglas de contenido mínimas para modelos de arquitectura del laboratorio openBIM.</description>
+    <author>lab@example.com</author>
+    <date>2026-11-05</date>
+    <purpose>Control de calidad de entregables (ISO 19650 / Plan BIM Perú)</purpose>
+    <milestone>Diseño - Entrega 01</milestone>
+  </info>
+
+  <specifications>
+
+    <!-- R01: el proyecto debe tener un código válido (3 letras + 2 dígitos, ej. LAB01) -->
+    <specification name="R01 - Código de proyecto" identifier="R01" ifcVersion="IFC4"
+                   description="El IfcProject debe tener un nombre que siga el código del proyecto."
+                   instructions="Use el código asignado en el BEP, ej. LAB01.">
+      <applicability minOccurs="1" maxOccurs="1">
+        <entity>
+          <name><simpleValue>IFCPROJECT</simpleValue></name>
+        </entity>
+      </applicability>
+      <requirements>
+        <attribute cardinality="required">
+          <name><simpleValue>Name</simpleValue></name>
+          <value>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[A-Z]{3}[0-9]{2}"/>
+            </xs:restriction>
+          </value>
+        </attribute>
+      </requirements>
+    </specification>
+
+    <!-- R02: debe existir al menos un nivel, y cada nivel debe tener nombre -->
+    <specification name="R02 - Niveles definidos" identifier="R02" ifcVersion="IFC4"
+                   description="El modelo debe contener al menos un IfcBuildingStorey con nombre.">
+      <applicability minOccurs="1" maxOccurs="unbounded">
+        <entity>
+          <name><simpleValue>IFCBUILDINGSTOREY</simpleValue></name>
+        </entity>
+      </applicability>
+      <requirements>
+        <attribute cardinality="required">
+          <name><simpleValue>Name</simpleValue></name>
+        </attribute>
+      </requirements>
+    </specification>
+
+    <!-- R03: debe existir al menos un muro, con nomenclatura MUR-### -->
+    <specification name="R03 - Nomenclatura de muros" identifier="R03" ifcVersion="IFC4"
+                   description="Debe haber muros, y cada IfcWall debe nombrarse MUR-### (ej. MUR-001).">
+      <applicability minOccurs="1" maxOccurs="unbounded">
+        <entity>
+          <name><simpleValue>IFCWALL</simpleValue></name>
+        </entity>
+      </applicability>
+      <requirements>
+        <attribute cardinality="required">
+          <name><simpleValue>Name</simpleValue></name>
+          <value>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="MUR-[0-9]{3}"/>
+            </xs:restriction>
+          </value>
+        </attribute>
+      </requirements>
+    </specification>
+
+    <!-- R04: cada muro debe declarar si es exterior y si es portante -->
+    <specification name="R04 - Propiedades obligatorias de muros" identifier="R04" ifcVersion="IFC4"
+                   description="Todo IfcWall debe tener Pset_WallCommon.IsExternal y LoadBearing."
+                   instructions="Complete ambas propiedades en el software de autoría antes de exportar.">
+      <applicability minOccurs="0" maxOccurs="unbounded">
+        <entity>
+          <name><simpleValue>IFCWALL</simpleValue></name>
+        </entity>
+      </applicability>
+      <requirements>
+        <property dataType="IFCBOOLEAN" cardinality="required">
+          <propertySet><simpleValue>Pset_WallCommon</simpleValue></propertySet>
+          <baseName><simpleValue>IsExternal</simpleValue></baseName>
+        </property>
+        <property dataType="IFCBOOLEAN" cardinality="required">
+          <propertySet><simpleValue>Pset_WallCommon</simpleValue></propertySet>
+          <baseName><simpleValue>LoadBearing</simpleValue></baseName>
+        </property>
+      </requirements>
+    </specification>
+
+  </specifications>
+</ids>

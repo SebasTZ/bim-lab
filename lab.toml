@@ -1,0 +1,21 @@
+# Configuración del laboratorio openBIM.
+# Las reglas son datos versionados en Git, no código: cambiarlas no requiere tocar Python.
+
+[ids]
+default = "ids/LAB01-requisitos-minimos.ids"
+
+[naming]
+# Estructura de nombre de archivo basada en ISO 19650-2 (campos del Anexo Nacional UK
+# como referencia). Ajusta campos y códigos a lo que defina el BEP / EIR de tu proyecto.
+separator = "-"
+fields = ["proyecto", "originador", "volumen", "nivel", "tipo", "rol", "numero"]
+
+[naming.rules]
+# Cada valor es una expresión regular que debe cumplirse completa (fullmatch).
+proyecto   = "LAB01"
+originador = "[A-Z]{3,6}"
+volumen    = "[A-Z0-9]{2}"
+nivel      = "ZZ|XX|B[0-9]|[0-9]{2}"
+tipo       = "M3|M2|DR|SH|RP"
+rol        = "A|S|E|M|P|C"
+numero     = "[0-9]{4}"
