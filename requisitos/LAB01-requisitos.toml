@@ -1,0 +1,147 @@
+# Matriz de requisitos de información · LAB01
+#
+# FUENTE MAESTRA. El archivo .ids es un derivado que se genera desde aquí:
+#     python scripts/generar_ids.py requisitos/LAB01-requisitos.toml
+# No edites el .ids a mano: cualquier cambio se hace en esta matriz.
+#
+# Cadena de trazabilidad (ISO 19650):
+#     necesidad de la entidad (PIR)  →  requisito de intercambio (EIR)  →  regla verificable (IDS)
+#
+# CLASE DIDACTICO: todo el contenido es un ejemplo creado para el laboratorio.
+# No proviene de un EIR real ni de una norma. En un proyecto real, `fuente`
+# debe apuntar a la cláusula exacta del documento oficial que origina cada requisito.
+
+[meta]
+proyecto    = "LAB01"
+titulo      = "LAB01 - Requisitos mínimos de entrega (arquitectura)"
+version     = "1.1.0"
+autor       = "sebastz3120@gmail.com"
+fecha       = "2026-11-06"                    # fija, para que el .ids generado sea reproducible
+hito        = "Diseño - Entrega 01"
+proposito   = "Aprendizaje: control de calidad de entregables según ISO 19650"
+ifc_version = ["IFC4"]
+clase       = "DIDACTICO"
+salida      = "ids/LAB01-requisitos-minimos.ids"
+
+
+# ─────────────────────────────────────────────────────────────────────
+# 1. Necesidades de información de la entidad (PIR)
+#    Se escriben como preguntas que la entidad necesita responder
+#    para tomar una decisión en un hito del proyecto.
+# ─────────────────────────────────────────────────────────────────────
+
+[[necesidad]]
+id       = "PIR-01"
+pregunta = "¿La entrega pertenece a este proyecto?"
+decision = "Registrar la entrega en el expediente correcto"
+
+[[necesidad]]
+id       = "PIR-02"
+pregunta = "¿En qué nivel del edificio está cada elemento?"
+decision = "Coordinar especialidades y metrar por piso"
+
+[[necesidad]]
+id       = "PIR-03"
+pregunta = "¿Se puede identificar cada muro en planos y metrados?"
+decision = "Vincular el modelo con el presupuesto y las observaciones"
+
+[[necesidad]]
+id       = "PIR-04"
+pregunta = "¿Qué muros son exteriores y cuáles son portantes?"
+decision = "Revisar la envolvente y la estructura"
+
+[[necesidad]]
+id       = "PIR-05"
+pregunta = "¿A qué altura está cada nivel?"
+decision = "Compatibilizar arquitectura con estructuras"
+
+# ─────────────────────────────────────────────────────────────────────
+# 2. Requisitos de intercambio (EIR) convertidos en reglas IDS
+#    Cada requisito responde a una necesidad y declara cómo se verifica.
+# ─────────────────────────────────────────────────────────────────────
+
+[[requisito]]
+id              = "R01"
+nombre          = "Código de proyecto"
+responde_a      = "PIR-01"
+clase           = "DIDACTICO"
+fuente          = "Ejemplo del laboratorio"
+aplica_a        = "IFCPROJECT"
+min_ocurrencias = 1
+max_ocurrencias = 1
+descripcion     = "El IfcProject debe llevar el código asignado al proyecto."
+instrucciones   = "Escriba el código del proyecto (ej. LAB01) en el nombre del proyecto antes de exportar."
+
+  [[requisito.exige]]
+  tipo   = "atributo"
+  nombre = "Name"
+  patron = "[A-Z]{3}[0-9]{2}"
+
+[[requisito]]
+id              = "R02"
+nombre          = "Niveles definidos"
+responde_a      = "PIR-02"
+clase           = "DIDACTICO"
+fuente          = "Ejemplo del laboratorio"
+aplica_a        = "IFCBUILDINGSTOREY"
+min_ocurrencias = 1
+descripcion     = "El modelo debe contener al menos un nivel, y cada nivel debe tener nombre."
+instrucciones   = "Defina los niveles del edificio y asigne un nombre a cada uno."
+
+  [[requisito.exige]]
+  tipo   = "atributo"
+  nombre = "Name"
+
+[[requisito]]
+id              = "R03"
+nombre          = "Nomenclatura de muros"
+responde_a      = "PIR-03"
+clase           = "DIDACTICO"
+fuente          = "Ejemplo del laboratorio"
+aplica_a        = "IFCWALL"
+min_ocurrencias = 1
+descripcion     = "Debe haber muros, y cada IfcWall debe nombrarse MUR-### (ej. MUR-001)."
+instrucciones   = "Nombre cada muro con el prefijo MUR- seguido de tres dígitos."
+
+  [[requisito.exige]]
+  tipo   = "atributo"
+  nombre = "Name"
+  patron = "MUR-[0-9]{3}"
+
+[[requisito]]
+id              = "R04"
+nombre          = "Propiedades obligatorias de muros"
+responde_a      = "PIR-04"
+clase           = "DIDACTICO"
+fuente          = "Ejemplo del laboratorio"
+aplica_a        = "IFCWALL"
+min_ocurrencias = 0
+descripcion     = "Todo IfcWall debe declarar si es exterior y si es portante."
+instrucciones   = "Complete IsExternal y LoadBearing en Pset_WallCommon antes de exportar."
+
+  [[requisito.exige]]
+  tipo      = "propiedad"
+  pset      = "Pset_WallCommon"
+  nombre    = "IsExternal"
+  tipo_dato = "IFCBOOLEAN"
+
+  [[requisito.exige]]
+  tipo      = "propiedad"
+  pset      = "Pset_WallCommon"
+  nombre    = "LoadBearing"
+  tipo_dato = "IFCBOOLEAN"
+
+[[requisito]]
+id              = "R05"
+nombre          = "Elevación de niveles"
+responde_a      = "PIR-05"
+clase           = "DIDACTICO"
+fuente          = "Ejemplo del laboratorio"
+aplica_a        = "IFCBUILDINGSTOREY"
+min_ocurrencias = 1
+descripcion     = "Cada nivel debe declarar su elevación."
+instrucciones   = "Asigne la elevación de cada nivel (en metros) antes de exportar."
+
+  [[requisito.exige]]
+  tipo   = "atributo"
+  nombre = "Elevation"

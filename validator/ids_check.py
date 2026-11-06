@@ -15,6 +15,14 @@ _CODE_IN_NAME = re.compile(r"^\s*([A-Za-z]+\d+)\s*-\s*(.+)$")
 MAX_DETAILS = 10
 
 
+def _trace(description: str | None) -> str | None:
+    """Extrae el tramo 'Responde a ...' que generar_ids.py escribe en la descripción."""
+    for part in (description or "").split(" | "):
+        if part.startswith("Responde a"):
+            return part
+    return None
+
+
 def check_ids(model: ifcopenshell.file, ids_path: Path) -> list[CheckResult]:
     spec_set = ids.open(str(ids_path), validate=True)
     spec_set.validate(model)
@@ -64,6 +72,8 @@ def check_ids(model: ifcopenshell.file, ids_path: Path) -> list[CheckResult]:
                 applicable=applicable,
                 failed=len(spec.failed_entities),
                 details=details,
+                trace=_trace(spec.description),
+                fix=spec.instructions or None,
             )
         )
     return results

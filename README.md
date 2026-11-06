@@ -34,7 +34,8 @@ La validación ocurre en dos capas, porque el estándar **IDS** (Information Del
                          Consola (PASS/FAIL) + JSON
 ```
 
-- **Las reglas son datos, no código.** La nomenclatura vive en `lab.toml` y los requisitos de contenido en archivos `.ids`. Ambos se versionan en Git: cambiar una regla no requiere tocar Python.
+- **Las reglas son datos, no código.** La nomenclatura vive en `lab.toml` y los requisitos de contenido en una matriz TOML que genera el `.ids`. Todo se versiona en Git: cambiar una regla no requiere tocar Python.
+- **Cada regla es trazable.** Un FAIL indica a qué necesidad de la entidad responde la regla y cómo corregirlo.
 - **Un IDS escrito para IFC4 rechaza un modelo IFC2X3** en lugar de dejarlo pasar en silencio.
 - **Un archivo corrupto no detiene la auditoría:** se reporta como incumplimiento.
 
@@ -65,6 +66,7 @@ pip install -r requirements.txt
 Luego genera los modelos de prueba y audítalos:
 
 ```bash
+python scripts/generar_ids.py requisitos/LAB01-requisitos.toml
 python scripts/make_samples.py
 python -m validator samples/
 python -m validator samples/ --json reports/auditoria.json
@@ -88,9 +90,29 @@ Reglas IDS (contenido)
   [FAIL] R04  Propiedades obligatorias de muros  (0/1)
          • IfcWall 'MUR-001' [...]: IsExternal data shall be provided in the dataset Pset_WallCommon → The required property set does not exist
          • IfcWall 'MUR-001' [...]: LoadBearing data shall be provided in the dataset Pset_WallCommon → The required property set does not exist
+         ↳ Responde a PIR-04: ¿Qué muros son exteriores y cuáles son portantes?
+         ↳ Cómo corregir: Complete IsExternal y LoadBearing en Pset_WallCommon antes de exportar.
 ────────────────────────────────────────────────────────────────────────
 ENTREGABLE RECHAZADO  4/6 reglas cumplidas
 ```
+
+## De la necesidad a la regla verificable
+
+ISO 19650 encadena los requisitos de información: la entidad parte de sus necesidades como organización (OIR) y como propietaria del activo (AIR), las concreta para el proyecto (PIR) y, en cada contratación, las traduce en requisitos de intercambio (EIR). IDS es la forma verificable por máquina de una parte del EIR.
+
+```
+Necesidad de la entidad (PIR)  →  Requisito de intercambio (EIR)  →  Regla verificable (IDS)
+"¿Qué muros son portantes?"       Todo muro declara LoadBearing      Pset_WallCommon.LoadBearing
+```
+
+La fuente maestra es la matriz `requisitos/LAB01-requisitos.toml`. Cada necesidad se escribe como la pregunta que la entidad necesita responder para decidir; cada requisito declara a qué necesidad responde, su clase (`DIDACTICO`, `NORMATIVO` o `PROPUESTA`) y su fuente. El `.ids` es un **derivado**: no se edita a mano.
+
+```bash
+python scripts/generar_ids.py requisitos/LAB01-requisitos.toml          # regenera el .ids
+python scripts/generar_ids.py requisitos/LAB01-requisitos.toml --check  # falla si el .ids no está al día
+```
+
+Antes de generar, la matriz se valida: ids duplicados, campos faltantes, requisitos que apuntan a una necesidad inexistente y necesidades que ningún requisito responde.
 
 ## Uso
 
@@ -137,15 +159,19 @@ Cada campo se valida con una expresión regular. Los códigos actuales son de ej
 | R03 | Existen muros, y todos se nombran `MUR-###` | Presencia de clase + nomenclatura de elementos |
 | R04 | Todo `IfcWall` declara `Pset_WallCommon.IsExternal` y `LoadBearing` | Propiedades obligatorias con tipo de dato |
 
+Cada regla responde a una necesidad (PIR-01 a PIR-04) definida en la matriz.
+
 El archivo es válido contra el esquema XSD oficial de IDS 1.0.
 
 ## Estructura del proyecto
 
 ```
 bim-lab/
-├── ids/                  # Requisitos de contenido (IDS 1.0)
+├── requisitos/           # Matriz de requisitos: fuente maestra (PIR → EIR → IDS)
+├── ids/                  # IDS 1.0 generado desde la matriz (derivado)
 ├── samples/              # Modelos IFC de prueba (uno válido, uno inválido)
 ├── scripts/
+│   ├── generar_ids.py    # Genera y comprueba el .ids desde la matriz
 │   └── make_samples.py   # Genera los modelos de prueba con IfcOpenShell
 ├── validator/
 │   ├── __main__.py       # CLI
@@ -186,7 +212,8 @@ Este repositorio no reproduce el texto de las normas. Ante cualquier discrepanci
 ## Hoja de ruta
 
 - [x] **Etapa 1:** validación de entregables (nomenclatura + IDS)
-- [ ] **Etapa 2:** traducir requisitos de información reales (de EIR a IDS)
+- [x] **Etapa 2:** cadena de requisitos trazable (PIR → EIR → IDS) con matriz como fuente maestra
+- [ ] **Etapa 2b:** matriz alimentada desde las plantillas oficiales del MEF (EIR, MIDP)
 - [ ] **Etapa 3:** auditar modelos reales exportados desde software de autoría
 - [ ] **Etapa 4:** versionado y líneas base de la información con Git (tags y releases) y su relación con un CDE institucional
 - [ ] **Etapa 5:** microservicio (API + Docker) e integración continua

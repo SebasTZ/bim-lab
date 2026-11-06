@@ -16,6 +16,8 @@ class CheckResult:
     applicable: int = 0  # Elementos evaluados (solo reglas IDS)
     failed: int = 0      # Elementos que no cumplen (solo reglas IDS)
     details: list[str] = field(default_factory=list)
+    trace: str | None = None   # A qué necesidad de la entidad responde (desde la descripción del IDS)
+    fix: str | None = None     # Cómo corregirlo (desde las instrucciones del IDS)
 
 
 @dataclass

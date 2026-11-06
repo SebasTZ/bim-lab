@@ -16,6 +16,7 @@ def build(path: str, compliant: bool) -> None:
     site = ifcopenshell.api.root.create_entity(m, ifc_class="IfcSite", name="Terreno")
     building = ifcopenshell.api.root.create_entity(m, ifc_class="IfcBuilding", name="Bloque A")
     storey = ifcopenshell.api.root.create_entity(m, ifc_class="IfcBuildingStorey", name="Nivel 01")
+    storey.Elevation = 0.0  # R05: elevación del nivel, en metros
 
     ifcopenshell.api.aggregate.assign_object(m, products=[site], relating_object=project)
     ifcopenshell.api.aggregate.assign_object(m, products=[building], relating_object=site)

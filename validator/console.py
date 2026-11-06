@@ -38,6 +38,10 @@ def print_report(report: AuditReport) -> None:
             print(f"  {_tag(check.passed)} {check.code}  {check.name}{_c(counts, '90')}")
             for detail in check.details:
                 print(_c(f"         • {detail}", "33"))
+            if not check.passed and check.trace:
+                print(_c(f"         ↳ {check.trace}", "36"))
+            if not check.passed and check.fix:
+                print(_c(f"         ↳ Cómo corregir: {check.fix}", "36"))
 
     total = len(report.checks)
     ok = sum(c.passed for c in report.checks)
